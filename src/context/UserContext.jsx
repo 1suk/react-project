@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
   // }
   const register = async (email, password, name) => {
     try {
-      const response = await axios.post(`${API_URL}/api/user`, {
+      const response = await axios.post(`${API_URL}/api/user/signup`, {
         email,
         password,
         userName: name,
@@ -97,21 +97,42 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = (email, password) => {
-    const found = users.find((u) => u.email == email && u.password == password);
+  // const login = (email, password) => {
+  //   const found = users.find((u) => u.email == email && u.password == password);
 
-    if (!found) {
-      alert("이메일 또는 비밀번호가 틀렸습니다.");
+  //   if (!found) {
+  //     alert("이메일 또는 비밀번호가 틀렸습니다.");
+  //     return { error: "로그인 실패" };
+  //   }
+
+  //   setUser(found);
+
+  //   closeLoginModal();
+
+  //   return { user: found };
+  // };
+  const login = async (email, password) => {
+    try {
+      const response = await axios.post(`${API_URL}/api/user/login`, {
+        email,
+        password,
+      });
+
+      console.log("로그인 응답: ", response.data);
+
+      const loggedInUser = response.data;
+      setUser(loggedInUser);
+      closeLoginModal();
+      return { user: loggedInUser };
+    } catch (error) {
+      console.error("로그인 실패: ", error);
+      alert(
+        error.response?.data?.message ||
+          "이메일 또는 비밀번호가 일치하지 않습니다."
+      );
       return { error: "로그인 실패" };
     }
-
-    setUser(found);
-
-    closeLoginModal();
-
-    return { user: found };
   };
-
   const logout = () => {
     setUser(null);
   };
