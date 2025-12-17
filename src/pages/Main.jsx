@@ -31,7 +31,10 @@ export const Main = () => {
   // }, [movies]);
 
   const handleMovieClick = (movie) => {
-    navigate(`/movie/${movie.id}`);
+    // navigate(`/movie/${movie.id}`);
+    //navigate(`/movie/movie.movieNo`); //문자열로 들어감
+    navigate(`/movie/${movie.movieNo}`);
+    console.log("영화 번호:", movie.movieNo);
   };
 
   return (

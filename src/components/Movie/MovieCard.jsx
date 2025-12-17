@@ -1,20 +1,18 @@
-import './MovieCard.css';
+import "./MovieCard.css";
 
-export const MovieCard = ({ movie, onClick }) => {
+export const MovieCard = ({ movie, onCardClick }) => {
   return (
-    <div className="movie-card" onClick={() => onClick(movie)}>
+    <div className="movie-card" onClick={() => onCardClick(movie)}>
       <div className="movie-card-poster">
-        <img 
-          src={movie.posterUrl} 
+        <img
+          src={movie.posterUrl}
           alt={movie.titleKo}
           className="movie-card-image"
         />
       </div>
-      
+
       <div className="movie-card-info">
-        <h3 className="movie-card-title">
-          {movie.titleKo}
-        </h3>
+        <h3 className="movie-card-title">{movie.titleKo}</h3>
         <div className="movie-card-meta">
           <div className="movie-card-rating">
             <span className="star">★</span>
@@ -26,6 +24,6 @@ export const MovieCard = ({ movie, onClick }) => {
       </div>
     </div>
   );
-}
+};
 
-export default MovieCard
+export default MovieCard;

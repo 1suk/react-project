@@ -3,9 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { movies } from "../data/Movies";
 import "./MovieDetail.css";
 import { useAuth } from "../context/UserContext";
+import { API_URL } from "../Config";
+import axios from "axios";
 
 export const MovieDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Main -> URL -> MovieDetail
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -20,35 +22,19 @@ export const MovieDetail = () => {
   const [editComment, setEditComment] = useState("");
   const [editRating, setEditRating] = useState(0);
 
-  //   // 로그인된 유저 정보 가져오기
-  //   const getCurrentUser = () => {
-  //     const userData = localStorage.getItem('user');
-  //     if (userData) {
-  //       const user = JSON.parse(userData);
-  //       return user.name || user.username || user.email || '익명';
-  //     }
-  //     return '익명';
-  //   };
-
   useEffect(() => {
-    const foundMovie = movies.find((m) => m.id === Number(id));
-    setMovie(foundMovie);
+    const fetchMovies = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/movie/${id}`);
+        setMovie(response.data);
+      } catch (error) {
+        console.error("영화 상세 데이터 로딩 실패:", error);
+        alert("영화 정보를 불러오는데 실패했습니다.");
+      }
+    };
 
-    const savedReviews = localStorage.getItem(`movie(${id})_reviews`);
-    if (savedReviews) {
-      setReviews(JSON.parse(savedReviews));
-    } else if (foundMovie) {
-      setReviews(foundMovie.reviews || []);
-    }
+    fetchMovies();
   }, [id]);
-
-  const saveReviews = (updatedReviews) => {
-    setReviews(updatedReviews);
-    localStorage.setItem(
-      `movie(${id})_reviews`,
-      JSON.stringify(updatedReviews)
-    );
-  };
 
   const handleSubmitReview = (e) => {
     e.preventDefault();
@@ -136,10 +122,17 @@ export const MovieDetail = () => {
               <span className="year">{movie.year}</span>
             </div>
 
-            <div className="detail-genre-list">
+            {/* <div className="detail-genre-list">
               {movie.genre.map((genre, index) => (
                 <span key={index} className="genre-tag">
                   {genre}
+                </span>
+              ))}
+            </div> */}
+            <div className="detail-genre-list">
+              {movie.genre.split(",").map((genre, index) => (
+                <span key={index} className="genre-tag">
+                  {genre.trim()}
                 </span>
               ))}
             </div>
@@ -149,7 +142,12 @@ export const MovieDetail = () => {
                 <strong>감독:</strong> {movie.director}
               </p>
               <p>
-                <strong>출연:</strong> {movie.cast.join(", ")}
+                {/* <strong>출연:</strong> {movie.cast.join(", ")} */}
+                <strong>출연:</strong>{" "}
+                {movie.cast
+                  .split(",")
+                  .map((actor) => actor.trim())
+                  .join(", ")}
               </p>
             </div>
 

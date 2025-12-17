@@ -13,7 +13,11 @@ export function MovieGrid({ movies, onMovieClick }) {
           //   movie={movie}
           //   onClick={onMovieClick}
           // />
-          <MovieCard key={movie.movieNo} movie={movie} onClick={onMovieClick} />
+          <MovieCard
+            key={movie.movieNo}
+            movie={movie}
+            onCardClick={onMovieClick}
+          />
         ))}
       </div>
     </div>
