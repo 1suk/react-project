@@ -13,8 +13,11 @@ export const Main = () => {
     const fetchMovies = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/movie`);
-        setMovies(response.data);
-        //setMovies(response.data.movies); map 오류
+        // setMovies(response.data); map 오류
+        setMovies(response.data.movies);
+        console.log(response.data);
+        // console.log("영화 목록 불러오기: ", response.data.movies);
+        // console.log("영화 목록: ", movies); 비동기 처리여서 로그 찍는 시점이 상태 업데이트 보다 빨라서 출력 안됨
       } catch (error) {
         console.error("영화를 불러오기 실패: ", error);
       }
@@ -22,6 +25,10 @@ export const Main = () => {
 
     fetchMovies();
   }, []);
+
+  // useEffect(() => {
+  //   console.log("영화 목록 불러오기: ", movies);
+  // }, [movies]);
 
   const handleMovieClick = (movie) => {
     navigate(`/movie/${movie.id}`);
